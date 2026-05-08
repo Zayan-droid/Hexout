@@ -1,0 +1,113 @@
+:root {
+  --bg-0: #0b0d12;
+  --bg-1: #11141c;
+  --bg-2: #1a1f2b;
+  --fg-0: #f4f6fb;
+  --fg-1: #c8cee0;
+  --fg-2: #7b8497;
+  --accent: #ffd23f;
+  --accent-2: #ff8a3d;
+  --danger: #ff4d6d;
+  --success: #4ade80;
+  --tile-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: radial-gradient(
+      ellipse at top,
+      #1a1f2b 0%,
+      var(--bg-0) 60%
+    ),
+    var(--bg-0);
+  color: var(--fg-0);
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.app-shell {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-pad {
+  padding: 16px;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(180deg, var(--accent) 0%, var(--accent-2) 100%);
+  color: #1a1208;
+  font-weight: 700;
+  padding: 14px 22px;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(255, 138, 61, 0.35);
+  transition: transform 0.08s ease, box-shadow 0.2s ease;
+}
+.btn-primary:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+.btn-ghost {
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--fg-1);
+}
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.title {
+  font-size: clamp(40px, 9vw, 72px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  background: linear-gradient(180deg, #fff 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  color: var(--fg-2);
+  margin-top: 8px;
+}

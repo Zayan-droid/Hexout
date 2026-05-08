@@ -1,0 +1,10 @@
+{
+  "id": 1,
+  "name": "First Steps",
+  "gridRadius": 2,
+  "tiles": [
+    { "q": 0, "r": 0, "direction": "RIGHT" },
+    { "q": -1, "r": 0, "direction": "LEFT" },
+    { "q": 1, "r": -1, "direction": "TOP_RIGHT" }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "Bash(npm install *)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:58624/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:5176/)",
+      "PowerShell(Get-NetTCPConnection -LocalPort 5173,5174,5175,5176 -State Listen -ErrorAction SilentlyContinue)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp"
+    ]
+  }
+}

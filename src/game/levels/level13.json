@@ -1,0 +1,19 @@
+{
+  "id": 13,
+  "name": "Web",
+  "difficulty": "hard",
+  "par": 10,
+  "gridRadius": 3,
+  "tiles": [
+    { "q": 3, "r": 0, "direction": "RIGHT" },
+    { "q": 2, "r": 0, "direction": "RIGHT" },
+    { "q": 1, "r": 0, "direction": "RIGHT" },
+    { "q": 0, "r": 0, "direction": "RIGHT" },
+    { "q": 0, "r": -3, "direction": "TOP_LEFT" },
+    { "q": 0, "r": -2, "direction": "TOP_LEFT" },
+    { "q": 0, "r": -1, "direction": "TOP_LEFT" },
+    { "q": -3, "r": 1, "direction": "LEFT" },
+    { "q": 2, "r": -2, "direction": "TOP_RIGHT" },
+    { "q": -1, "r": 3, "direction": "BOTTOM_RIGHT" }
+  ]
+}

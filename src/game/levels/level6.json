@@ -1,0 +1,12 @@
+{
+  "id": 6,
+  "name": "Chain",
+  "difficulty": "easy",
+  "par": 3,
+  "gridRadius": 2,
+  "tiles": [
+    { "q": 2, "r": 0, "direction": "RIGHT" },
+    { "q": 1, "r": 0, "direction": "RIGHT" },
+    { "q": 0, "r": 0, "direction": "RIGHT" }
+  ]
+}

@@ -6,6 +6,8 @@ import type { GameStatus } from "@/types";
 interface ResultOverlayProps {
   status: GameStatus;
   moves: number;
+  par: number;
+  stars: number;
   onReplay: () => void;
   nextLevelId: number | null;
 }
@@ -13,6 +15,8 @@ interface ResultOverlayProps {
 export function ResultOverlay({
   status,
   moves,
+  par,
+  stars,
   onReplay,
   nextLevelId,
 }: ResultOverlayProps) {
@@ -20,6 +24,7 @@ export function ResultOverlay({
   const rafRef = useRef<number>(0);
   const won = status === "won";
 
+  // Confetti
   useEffect(() => {
     if (status !== "won") {
       cancelAnimationFrame(rafRef.current);
@@ -34,16 +39,9 @@ export function ResultOverlay({
     const PALETTE = ["#ffd23f", "#ff8a3d", "#4ade80", "#60a5fa", "#c084fc", "#f472b6", "#22d3ee", "#ffffff"];
 
     interface Confetto {
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      rot: number;
-      rotV: number;
-      w: number;
-      h: number;
-      color: string;
-      alpha: number;
+      x: number; y: number; vx: number; vy: number;
+      rot: number; rotV: number; w: number; h: number;
+      color: string; alpha: number;
     }
 
     const pieces: Confetto[] = Array.from({ length: 90 }, () => ({
@@ -82,7 +80,6 @@ export function ResultOverlay({
         rafRef.current = requestAnimationFrame(tick);
       }
     };
-
     rafRef.current = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafRef.current);
   }, [status]);
@@ -96,11 +93,8 @@ export function ResultOverlay({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           style={{
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            position: "absolute", inset: 0,
+            display: "flex", alignItems: "center", justifyContent: "center",
             background: "rgba(8,10,15,0.72)",
             backdropFilter: "blur(7px)",
             zIndex: 10,
@@ -109,15 +103,8 @@ export function ResultOverlay({
           {won && (
             <canvas
               ref={canvasRef}
-              width={400}
-              height={700}
-              style={{
-                position: "absolute",
-                inset: 0,
-                width: "100%",
-                height: "100%",
-                pointerEvents: "none",
-              }}
+              width={400} height={700}
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }}
             />
           )}
 
@@ -127,54 +114,36 @@ export function ResultOverlay({
             transition={{ type: "spring", stiffness: 220, damping: 20, delay: 0.06 }}
             style={{
               background: "var(--bg-1)",
-              padding: "28px 28px 22px",
+              padding: "24px 24px 20px",
               borderRadius: 22,
               border: "1px solid rgba(255,255,255,0.09)",
-              minWidth: 290,
+              minWidth: 280,
               textAlign: "center",
               boxShadow: "0 30px 80px rgba(0,0,0,0.55)",
               position: "relative",
               zIndex: 1,
             }}
           >
-            {/* Glow ring behind card */}
             {won && (
               <motion.div
                 style={{
-                  position: "absolute",
-                  inset: -2,
-                  borderRadius: 24,
-                  background: "transparent",
-                  border: "2px solid var(--success)",
-                  zIndex: -1,
+                  position: "absolute", inset: -2, borderRadius: 24,
+                  border: "2px solid var(--success)", zIndex: -1,
                 }}
                 animate={{ opacity: [0.4, 1, 0.4], scale: [1, 1.02, 1] }}
                 transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
               />
             )}
 
-            <div
-              style={{
-                fontSize: 13,
-                letterSpacing: "0.18em",
-                fontWeight: 700,
-                color: won ? "var(--success)" : "var(--danger)",
-              }}
-            >
+            <div style={{ fontSize: 12, letterSpacing: "0.18em", fontWeight: 700, color: won ? "var(--success)" : "var(--danger)" }}>
               {won ? "CLEARED" : "STUCK"}
             </div>
 
             <motion.div
               style={{
-                fontSize: 38,
-                fontWeight: 800,
-                margin: "6px 0 4px",
-                background: won
-                  ? "linear-gradient(180deg,#fff,var(--success))"
-                  : "linear-gradient(180deg,#fff,var(--danger))",
-                WebkitBackgroundClip: "text",
-                backgroundClip: "text",
-                color: "transparent",
+                fontSize: 32, fontWeight: 800, margin: "4px 0 8px",
+                background: won ? "linear-gradient(180deg,#fff,var(--success))" : "linear-gradient(180deg,#fff,var(--danger))",
+                WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent",
               }}
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
@@ -183,26 +152,46 @@ export function ResultOverlay({
               {won ? "Level complete!" : "No moves left"}
             </motion.div>
 
-            <div style={{ color: "var(--fg-2)", marginBottom: 24, fontSize: 14 }}>
+            {/* Star display */}
+            {won && <StarRow stars={stars} />}
+
+            <div style={{ color: "var(--fg-2)", marginBottom: 4, fontSize: 13 }}>
               {moves} {moves === 1 ? "move" : "moves"}
+              {par > 0 && (
+                <span style={{ color: stars === 3 ? "var(--success)" : "var(--fg-2)", marginLeft: 6 }}>
+                  (par {par})
+                </span>
+              )}
             </div>
 
-            <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-              <button className="btn-ghost" onClick={onReplay}>
-                Replay
-              </button>
-              <Link to="/levels" className="btn-ghost">
-                Levels
-              </Link>
+            <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginTop: 16 }}>
+              <button className="btn-ghost" onClick={onReplay}>Replay</button>
+              <Link to="/levels" className="btn-ghost">Levels</Link>
               {won && nextLevelId !== null && (
-                <Link to={`/play/${nextLevelId}`} className="btn-primary">
-                  Next →
-                </Link>
+                <Link to={`/play/${nextLevelId}`} className="btn-primary">Next →</Link>
               )}
             </div>
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
+  );
+}
+
+function StarRow({ stars }: { stars: number }) {
+  return (
+    <div style={{ display: "flex", justifyContent: "center", gap: 6, margin: "8px 0 10px" }}>
+      {[1, 2, 3].map((n) => (
+        <motion.div
+          key={n}
+          initial={{ scale: 0, rotate: -30 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ type: "spring", stiffness: 380, damping: 18, delay: 0.2 + n * 0.1 }}
+          style={{ fontSize: 28, filter: n <= stars ? "drop-shadow(0 0 6px #ffd23f)" : "none" }}
+        >
+          {n <= stars ? "★" : "☆"}
+        </motion.div>
+      ))}
+    </div>
   );
 }

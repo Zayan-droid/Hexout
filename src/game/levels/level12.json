@@ -1,0 +1,18 @@
+{
+  "id": 12,
+  "name": "Funnel",
+  "difficulty": "hard",
+  "par": 9,
+  "gridRadius": 3,
+  "tiles": [
+    { "q": 3, "r": -3, "direction": "TOP_RIGHT" },
+    { "q": 2, "r": -2, "direction": "TOP_RIGHT" },
+    { "q": 1, "r": -1, "direction": "TOP_RIGHT" },
+    { "q": 0, "r": 0, "direction": "TOP_RIGHT" },
+    { "q": -1, "r": 1, "direction": "TOP_RIGHT" },
+    { "q": 3, "r": -1, "direction": "RIGHT" },
+    { "q": -3, "r": 2, "direction": "BOTTOM_LEFT" },
+    { "q": 1, "r": 2, "direction": "BOTTOM_RIGHT" },
+    { "q": -1, "r": -2, "direction": "LEFT" }
+  ]
+}

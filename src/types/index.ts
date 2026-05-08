@@ -8,6 +8,8 @@ export type Direction =
 
 export type TileType = "NORMAL";
 
+export type Difficulty = "beginner" | "easy" | "medium" | "hard" | "expert";
+
 export interface Hex {
   q: number;
   r: number;
@@ -25,6 +27,8 @@ export interface Tile {
 export interface LevelData {
   id: number;
   name?: string;
+  difficulty?: Difficulty;
+  par?: number;       // moves to earn 3 stars
   gridRadius: number;
   tiles: Array<{
     q: number;
@@ -36,3 +40,16 @@ export interface LevelData {
 }
 
 export type GameStatus = "playing" | "won" | "lost";
+
+export interface LevelProgress {
+  completed: boolean;
+  stars: number;       // 0-3
+  bestMoves: number;
+}
+
+export interface PlayerStats {
+  skillScore: number;         // 0-100, drives adaptive difficulty
+  totalLevelsCompleted: number;
+  invalidMoves: number;       // lifetime invalid move count
+  totalRetries: number;
+}

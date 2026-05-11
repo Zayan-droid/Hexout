@@ -28,27 +28,17 @@ export default function Home() {
         <Link
           to="/themes"
           className="btn-ghost"
+          aria-label={`Theme: ${theme.name}`}
           style={{
             display: "inline-flex",
             alignItems: "center",
             gap: 8,
-            padding: "8px 14px 8px 10px",
+            padding: "0 12px 0 10px",
             fontSize: 12,
-            minHeight: 36,
-            maxWidth: "60vw",
           }}
         >
           <ThemeChipSwatch />
-          <span
-            style={{
-              fontWeight: 600,
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {theme.name}
-          </span>
+          <span className="theme-chip-label">{theme.name}</span>
         </Link>
       </div>
 
@@ -60,6 +50,9 @@ export default function Home() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          justifyContent: "center",
+          gap: "clamp(18px, 4vw, 28px)",
+          margin: "auto",
         }}
       >
         {/* Floating hex emblem */}
@@ -69,7 +62,6 @@ export default function Home() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
           style={{
-            marginBottom: "clamp(14px, 3vw, 22px)",
             display: "flex",
             justifyContent: "center",
           }}
@@ -101,15 +93,19 @@ export default function Home() {
           initial={{ y: 12, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.7, delay: 0.1, ease: "easeOut" }}
-          style={{ width: "100%" }}
+          style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 10,
+          }}
         >
-          <div className="eyebrow" style={{ marginBottom: 12 }}>
-            A cozy hex puzzle
-          </div>
+          <div className="eyebrow">A cozy hex puzzle</div>
           <div className="title">
             Hex<em>Out</em>
           </div>
-          <div className="subtitle">
+          <div className="subtitle" style={{ marginTop: 0 }}>
             Tap a tile. Watch it drift away. <br />
             Clear the board, savor the calm.
           </div>
@@ -120,7 +116,6 @@ export default function Home() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.7, delay: 0.25, ease: "easeOut" }}
           style={{
-            marginTop: "clamp(28px, 6vw, 44px)",
             display: "flex",
             flexDirection: "column",
             gap: 12,
@@ -157,10 +152,7 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.6 }}
-          style={{
-            marginTop: "clamp(28px, 8vw, 60px)",
-            paddingInline: 12,
-          }}
+          style={{ paddingInline: 12 }}
         >
           <span
             className="serif-label"

@@ -296,6 +296,20 @@ a {
     box-shadow 0.55s ease, fill 0.55s ease, stroke 0.55s ease;
 }
 
+/* Theme chip on Home — hide label on small phones, just show swatch */
+.theme-chip-label {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+@media (max-width: 480px) {
+  .theme-chip-label {
+    display: none;
+  }
+}
+
 /* ---------- Responsive breakpoints ---------- */
 
 /* Phones (portrait) */

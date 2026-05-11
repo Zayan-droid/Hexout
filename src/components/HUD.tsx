@@ -29,57 +29,96 @@ export function HUD({ levelName, levelId, par, onReset }: HUDProps) {
     status === "playing" && moves > 0 && par > 0 ? calcStars(moves, par) : null;
 
   return (
-    <div
+    <header
       style={{
-        display: "grid",
-        gridTemplateColumns: "auto minmax(0, 1fr) auto",
-        alignItems: "center",
-        padding: "clamp(10px, 2.5vw, 16px) clamp(10px, 4vw, 18px) 10px",
-        gap: "clamp(6px, 1.5vw, 10px)",
         position: "relative",
         zIndex: 2,
+        padding: "clamp(8px, 2.2vw, 14px) clamp(10px, 4vw, 18px) 6px",
       }}
     >
-      <Link
-        to="/levels"
-        className="btn-ghost"
-        aria-label="Back"
-        style={{ padding: "0 14px", fontSize: 14, flexShrink: 0 }}
+      {/* Top row: back · title · controls */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "auto minmax(0, 1fr) auto",
+          alignItems: "center",
+          gap: "clamp(8px, 2vw, 12px)",
+        }}
       >
-        ←
-      </Link>
+        <Link
+          to="/levels"
+          className="btn-ghost"
+          aria-label="Back"
+          style={{ padding: "0 14px", fontSize: 14, flexShrink: 0 }}
+        >
+          ←
+        </Link>
 
-      <div style={{ textAlign: "center", minWidth: 0, overflow: "hidden" }}>
-        <div className="eyebrow" style={{ fontSize: 9 }}>
-          Level {levelId}
-          {par > 0 ? <span style={{ color: "var(--fg-muted)" }}>  ·  par {par}</span> : null}
+        <div style={{ textAlign: "center", minWidth: 0 }}>
+          <div className="eyebrow" style={{ fontSize: 9, lineHeight: 1 }}>
+            Level {levelId}
+            {par > 0 ? (
+              <span style={{ color: "var(--fg-muted)" }}>  ·  par {par}</span>
+            ) : null}
+          </div>
+          <div
+            style={{
+              fontFamily: "var(--font-display)",
+              fontWeight: 500,
+              fontStyle: "italic",
+              fontSize: "clamp(15px, 4vw, 19px)",
+              lineHeight: 1.2,
+              marginTop: 3,
+              color: "var(--fg-primary)",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              fontVariationSettings: '"opsz" 36, "SOFT" 100',
+            }}
+          >
+            {levelName}
+          </div>
         </div>
+
         <div
           style={{
-            fontFamily: "var(--font-display)",
-            fontWeight: 500,
-            fontStyle: "italic",
-            fontSize: "clamp(15px, 4.2vw, 20px)",
-            lineHeight: 1.3,
-            marginTop: 3,
-            color: "var(--fg-primary)",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            fontVariationSettings: '"opsz" 36, "SOFT" 100',
+            display: "flex",
+            gap: 6,
+            alignItems: "center",
+            flexShrink: 0,
           }}
         >
-          {levelName}
+          <button
+            className="btn-ghost"
+            onClick={onReset}
+            aria-label="Reset"
+            style={{ padding: "0 12px" }}
+          >
+            ↻
+          </button>
+          <button
+            className="btn-ghost"
+            onClick={toggleMute}
+            aria-label={muted ? "Unmute" : "Mute"}
+            style={{
+              padding: "0 12px",
+              opacity: muted ? 0.55 : 1,
+              fontSize: 13,
+            }}
+          >
+            {muted ? "🔇" : "🔊"}
+          </button>
         </div>
-        {/* Inline stats — fit on narrow screens */}
+      </div>
+
+      {/* Stats pill — its own centered row keeps the top row clean */}
+      <div style={{ display: "flex", justifyContent: "center", marginTop: 8 }}>
         <div
           style={{
-            marginTop: 4,
             display: "inline-flex",
             gap: 10,
             alignItems: "center",
-            justifyContent: "center",
-            padding: "4px 12px",
+            padding: "5px 14px",
             borderRadius: 999,
             background: "var(--surface-bg)",
             border: "1px solid var(--surface-border)",
@@ -91,53 +130,39 @@ export function HUD({ levelName, levelId, par, onReset }: HUDProps) {
           <StatInline label="TILES" value={tilesLeft} accent="var(--accent-primary)" />
           <span style={{ color: "var(--fg-muted)", opacity: 0.4, fontSize: 14 }}>·</span>
           <StatInline label="MOVES" value={moves} accent="var(--accent-secondary)" />
-        </div>
-        {previewStars !== null && (
-          <div style={{ fontSize: 11, letterSpacing: 2, marginTop: 2 }}>
-            {[1, 2, 3].map((n) => (
-              <span
-                key={n}
+          {previewStars !== null && (
+            <>
+              <span style={{ color: "var(--fg-muted)", opacity: 0.4, fontSize: 14 }}>·</span>
+              <div
                 style={{
-                  color: n <= previewStars ? "var(--accent-star)" : "color-mix(in srgb, var(--fg-muted) 50%, transparent)",
-                  textShadow:
-                    n <= previewStars ? "0 0 8px color-mix(in srgb, var(--accent-star) 70%, transparent)" : "none",
+                  fontSize: 12,
+                  letterSpacing: 1.2,
+                  lineHeight: 1,
+                  display: "inline-flex",
+                  gap: 1,
                 }}
               >
-                ★
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <div
-        style={{
-          display: "flex",
-          gap: 6,
-          alignItems: "center",
-          flexShrink: 0,
-        }}
-      >
-        <button
-          className="btn-ghost"
-          onClick={onReset}
-          aria-label="Reset"
-          style={{ padding: "0 12px" }}
-        >
-          ↻
-        </button>
-        <button
-          className="btn-ghost"
-          onClick={toggleMute}
-          aria-label={muted ? "Unmute" : "Mute"}
-          style={{
-            padding: "0 12px",
-            opacity: muted ? 0.55 : 1,
-            fontSize: 13,
-          }}
-        >
-          {muted ? "🔇" : "🔊"}
-        </button>
+                {[1, 2, 3].map((n) => (
+                  <span
+                    key={n}
+                    style={{
+                      color:
+                        n <= previewStars
+                          ? "var(--accent-star)"
+                          : "color-mix(in srgb, var(--fg-muted) 40%, transparent)",
+                      textShadow:
+                        n <= previewStars
+                          ? "0 0 8px color-mix(in srgb, var(--accent-star) 70%, transparent)"
+                          : "none",
+                    }}
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
       </div>
 
       <AnimatePresence>
@@ -150,7 +175,7 @@ export function HUD({ levelName, levelId, par, onReset }: HUDProps) {
             transition={{ type: "spring", stiffness: 380, damping: 20 }}
             style={{
               position: "absolute",
-              bottom: -28,
+              bottom: -22,
               left: "50%",
               transform: "translateX(-50%)",
               background:
@@ -172,7 +197,7 @@ export function HUD({ levelName, levelId, par, onReset }: HUDProps) {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </header>
   );
 }
 

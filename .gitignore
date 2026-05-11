@@ -9,3 +9,9 @@ dist-ssr
 .DS_Store
 .idea
 .vscode
+
+# TypeScript incremental build cache
+*.tsbuildinfo
+
+# Local Claude Code settings (not user-shared)
+.claude/settings.local.json

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { GameBoard } from "@/components/GameBoard";
 import { HUD } from "@/components/HUD";
 import { ResultOverlay } from "@/components/ResultOverlay";
+import { PowerUpBar } from "@/components/powerups/PowerUpBar";
 import { useGameStore } from "@/store/gameStore";
 import { useProgressStore, calcStars } from "@/store/progressStore";
 import { LEVELS, getLevelById } from "@/game/levels";
@@ -70,6 +71,7 @@ export default function Play() {
           nextLevelId={nextUnlocked && nextLevel ? nextLevel.id : null}
         />
       </div>
+      <PowerUpBar />
     </div>
   );
 }

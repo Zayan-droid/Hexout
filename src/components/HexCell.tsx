@@ -8,13 +8,21 @@ interface HexCellProps {
 
 export function HexCell({ hex, size }: HexCellProps) {
   const { x, y } = hexToPixel(hex, size);
+  const outer = hexCornerPoints(size * 0.94);
+  const inner = hexCornerPoints(size * 0.82);
   return (
-    <g transform={`translate(${x},${y})`}>
+    <g transform={`translate(${x},${y})`} className="theme-fade">
       <polygon
-        points={hexCornerPoints(size * 0.96)}
-        fill="rgba(255,255,255,0.025)"
-        stroke="rgba(255,255,255,0.06)"
-        strokeWidth={1}
+        points={outer}
+        fill="var(--cell-fill)"
+        stroke="var(--cell-stroke)"
+        strokeWidth={1.2}
+        strokeLinejoin="round"
+      />
+      <polygon
+        points={inner}
+        fill="url(#cellWell)"
+        opacity={0.7}
       />
     </g>
   );

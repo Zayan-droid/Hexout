@@ -180,3 +180,125 @@ export function buildGeneratedLevels(startId = 16): LevelData[] {
   }
   return levels;
 }
+
+// ── Harder generator: bigger boards, denser packing, biased toward long rays ───
+// The base generator picks directions uniformly, which tends to produce shallow
+// dependency graphs. The hard generator weights direction selection toward
+// longer exit rays so tiles are far more likely to sit in each other's paths.
+
+interface HardLevelParams {
+  radius: number;
+  tilesMin: number;
+  tilesMax: number;
+  /** 0 = uniform, ~1 = strong preference for tiles pointing across the board */
+  directionBias: number;
+}
+
+function pickBiasedDirection(
+  rng: () => number,
+  candidates: Array<{ dir: Direction; len: number }>,
+  bias: number
+): Direction {
+  // weight = len^(1 + bias*3) — higher bias raises the exponent
+  const exp = 1 + bias * 3;
+  let total = 0;
+  const weights: number[] = [];
+  for (const c of candidates) {
+    const w = Math.pow(c.len, exp);
+    weights.push(w);
+    total += w;
+  }
+  let pick = rng() * total;
+  for (let i = 0; i < candidates.length; i++) {
+    pick -= weights[i];
+    if (pick <= 0) return candidates[i].dir;
+  }
+  return candidates[candidates.length - 1].dir;
+}
+
+function generateHardLevel(
+  id: number,
+  seed: number,
+  params: HardLevelParams,
+  name?: string
+): LevelData {
+  const rng = mulberry32(seed);
+  const { radius, tilesMin, tilesMax, directionBias } = params;
+  const targetTiles = tilesMin + Math.floor(rng() * (tilesMax - tilesMin + 1));
+  const allCells = createHexagonBoardCells(radius);
+
+  const placed: TileSpec[] = [];
+  const usedKeys = new Set<string>();
+  let attempts = 0;
+  const maxAttempts = 12000;
+
+  while (placed.length < targetTiles && attempts < maxAttempts) {
+    attempts++;
+    const cell = randChoice(rng, allCells);
+    const key = hexKey(cell.q, cell.r);
+    if (usedKeys.has(key)) continue;
+
+    // Score each direction by ray length; reject 0-step ones (cell on edge facing out)
+    const dirCandidates: Array<{ dir: Direction; len: number }> = [];
+    for (const d of ALL_DIRECTIONS) {
+      const ray = getExitRayCells({ q: cell.q, r: cell.r, direction: d }, radius);
+      if (ray.length > 0) dirCandidates.push({ dir: d, len: ray.length });
+    }
+    if (dirCandidates.length === 0) continue;
+
+    const direction = pickBiasedDirection(rng, dirCandidates, directionBias);
+    const candidate: TileSpec = { q: cell.q, r: cell.r, direction };
+
+    const next = [...placed, candidate];
+    if (isSolvable(next, radius)) {
+      placed.push(candidate);
+      usedKeys.add(key);
+    }
+  }
+
+  return {
+    id,
+    name: name ?? `Level ${id}`,
+    difficulty: "expert",
+    par: Math.max(placed.length, 1),
+    gridRadius: radius,
+    tiles: placed,
+  };
+}
+
+// ── Pre-generate levels 51–120 (70 brutal levels) ──────────────────────────────
+// Tiers escalate: more tiles, larger boards, stronger direction bias.
+// All marked "expert" — the difficulty tabs were removed, so this is informational.
+const HARD_SPEC: Array<{ count: number; params: HardLevelParams }> = [
+  // 51-65 (15): beyond classic expert — packed radius-4 boards
+  { count: 15, params: { radius: 4, tilesMin: 20, tilesMax: 26, directionBias: 0.45 } },
+  // 66-85 (20): very dense radius-4 with strong cross-board bias
+  { count: 20, params: { radius: 4, tilesMin: 26, tilesMax: 34, directionBias: 0.65 } },
+  // 86-105 (20): step up to radius-5 with long ray bias
+  { count: 20, params: { radius: 5, tilesMin: 38, tilesMax: 52, directionBias: 0.75 } },
+  // 106-120 (15): nightmare tier — maximum density and bias
+  { count: 15, params: { radius: 5, tilesMin: 54, tilesMax: 72, directionBias: 0.9 } },
+];
+
+export function buildHardLevels(startId = 51): LevelData[] {
+  const levels: LevelData[] = [];
+  let id = startId;
+  let seed = 0xc0ffee42;
+  for (const spec of HARD_SPEC) {
+    for (let i = 0; i < spec.count; i++) {
+      // Generate; if the placer fell short, retry with a fresh seed up to 5 times
+      let best: LevelData = generateHardLevel(id, seed, spec.params);
+      let trySeed = seed;
+      for (let attempt = 0; attempt < 5; attempt++) {
+        if (best.tiles.length >= spec.params.tilesMin) break;
+        trySeed = (trySeed * 1664525 + 1013904223) >>> 0;
+        const candidate = generateHardLevel(id, trySeed, spec.params);
+        if (candidate.tiles.length > best.tiles.length) best = candidate;
+      }
+      levels.push(best);
+      id++;
+      seed = (seed * 1664525 + 1013904223) >>> 0;
+    }
+  }
+  return levels;
+}

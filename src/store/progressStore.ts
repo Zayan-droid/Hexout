@@ -91,7 +91,7 @@ export const useProgressStore = create<ProgressState>()(
           },
         })),
 
-      isUnlocked: (levelId) => {
+      isUnlocked: (_levelId) => {
         return true; // all levels unlocked for testing
       },
 

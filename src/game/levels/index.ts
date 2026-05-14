@@ -29,6 +29,26 @@ import level27 from "./level27.json";
 import level28 from "./level28.json";
 import level29 from "./level29.json";
 import level30 from "./level30.json";
+import level31 from "./level31.json";
+import level32 from "./level32.json";
+import level33 from "./level33.json";
+import level34 from "./level34.json";
+import level35 from "./level35.json";
+import level36 from "./level36.json";
+import level37 from "./level37.json";
+import level38 from "./level38.json";
+import level39 from "./level39.json";
+import level40 from "./level40.json";
+import level41 from "./level41.json";
+import level42 from "./level42.json";
+import level43 from "./level43.json";
+import level44 from "./level44.json";
+import level45 from "./level45.json";
+import level46 from "./level46.json";
+import level47 from "./level47.json";
+import level48 from "./level48.json";
+import level49 from "./level49.json";
+import level50 from "./level50.json";
 
 export const LEVELS: LevelData[] = [
   level1, level2, level3, level4, level5,
@@ -37,6 +57,10 @@ export const LEVELS: LevelData[] = [
   level16, level17, level18, level19, level20,
   level21, level22, level23, level24, level25,
   level26, level27, level28, level29, level30,
+  level31, level32, level33, level34, level35,
+  level36, level37, level38, level39, level40,
+  level41, level42, level43, level44, level45,
+  level46, level47, level48, level49, level50,
 ] as LevelData[];
 
 export function getLevelById(id: number | string): LevelData | undefined {

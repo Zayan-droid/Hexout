@@ -81,7 +81,7 @@ export const usePowerUpStore = create<PowerUpState>()(
           inventory: { ...s.inventory, [id]: (s.inventory[id] ?? 0) + count },
         })),
 
-      resetForLevel: () => set({ active: null, picks: [], usedThisLevel: 0 }),
+      resetForLevel: () => set({ active: null, picks: [], usedThisLevel: 0, inventory: { ...STARTING } }),
     }),
     {
       name: "hexout-powerups",

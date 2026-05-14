@@ -1,110 +1,87 @@
-﻿{
-    "id":  23,
-    "name":  "Paradox",
-    "gridRadius":  5,
-    "par":  17,
-    "difficulty":  "expert",
-    "tiles":  [
-                  {
-                      "q":  0,
-                      "key":  "k1",
-                      "r":  0,
-                      "direction":  "RIGHT"
-                  },
-                  {
-                      "q":  1,
-                      "key":  "k2",
-                      "r":  -1,
-                      "direction":  "TOP_LEFT"
-                  },
-                  {
-                      "q":  2,
-                      "r":  0,
-                      "direction":  "BOTTOM_LEFT"
-                  },
-                  {
-                      "q":  1,
-                      "r":  0,
-                      "direction":  "TOP_RIGHT",
-                      "locked":  "k1"
-                  },
-                  {
-                      "q":  0,
-                      "key":  "k3",
-                      "r":  1,
-                      "direction":  "LEFT",
-                      "locked":  "k1"
-                  },
-                  {
-                      "q":  -1,
-                      "r":  0,
-                      "direction":  "BOTTOM_RIGHT"
-                  },
-                  {
-                      "q":  2,
-                      "r":  -1,
-                      "direction":  "BOTTOM_RIGHT",
-                      "locked":  "k2"
-                  },
-                  {
-                      "q":  1,
-                      "key":  "k4",
-                      "r":  1,
-                      "direction":  "LEFT",
-                      "locked":  "k2"
-                  },
-                  {
-                      "q":  3,
-                      "r":  0,
-                      "direction":  "TOP_LEFT"
-                  },
-                  {
-                      "q":  -1,
-                      "r":  1,
-                      "direction":  "TOP_RIGHT",
-                      "locked":  "k3"
-                  },
-                  {
-                      "q":  0,
-                      "key":  "k5",
-                      "r":  2,
-                      "direction":  "BOTTOM_LEFT",
-                      "locked":  "k3"
-                  },
-                  {
-                      "q":  2,
-                      "r":  1,
-                      "direction":  "BOTTOM_RIGHT"
-                  },
-                  {
-                      "q":  -2,
-                      "r":  0,
-                      "direction":  "BOTTOM_LEFT"
-                  },
-                  {
-                      "q":  1,
-                      "r":  2,
-                      "direction":  "RIGHT",
-                      "locked":  "k4"
-                  },
-                  {
-                      "q":  -1,
-                      "r":  2,
-                      "direction":  "LEFT",
-                      "locked":  "k5"
-                  },
-                  {
-                      "q":  3,
-                      "key":  "k6",
-                      "r":  -1,
-                      "direction":  "BOTTOM_LEFT",
-                      "locked":  "k4"
-                  },
-                  {
-                      "q":  0,
-                      "r":  -1,
-                      "direction":  "TOP_RIGHT",
-                      "locked":  "k6"
-                  }
-              ]
+{
+  "id": 23,
+  "name": "Paradox",
+  "gridRadius": 4,
+  "par": 14,
+  "difficulty": "expert",
+  "tiles": [
+    {
+      "q": -2,
+      "r": -2,
+      "direction": "RIGHT"
+    },
+    {
+      "q": 3,
+      "r": -4,
+      "direction": "BOTTOM_LEFT",
+      "locked": "k4"
+    },
+    {
+      "q": 2,
+      "r": 1,
+      "direction": "LEFT",
+      "key": "k2"
+    },
+    {
+      "q": 2,
+      "r": -2,
+      "direction": "BOTTOM_LEFT",
+      "key": "k1"
+    },
+    {
+      "q": -1,
+      "r": 0,
+      "direction": "LEFT",
+      "locked": "k2"
+    },
+    {
+      "q": 1,
+      "r": 0,
+      "direction": "RIGHT"
+    },
+    {
+      "q": 0,
+      "r": 2,
+      "direction": "RIGHT"
+    },
+    {
+      "q": -2,
+      "r": -1,
+      "direction": "BOTTOM_RIGHT"
+    },
+    {
+      "q": -1,
+      "r": -1,
+      "direction": "BOTTOM_LEFT"
+    },
+    {
+      "q": 2,
+      "r": 2,
+      "direction": "TOP_LEFT",
+      "key": "k4"
+    },
+    {
+      "q": 1,
+      "r": -4,
+      "direction": "BOTTOM_RIGHT",
+      "key": "k3"
+    },
+    {
+      "q": 1,
+      "r": -2,
+      "direction": "BOTTOM_RIGHT",
+      "locked": "k1"
+    },
+    {
+      "q": 3,
+      "r": -3,
+      "direction": "BOTTOM_LEFT"
+    },
+    {
+      "q": 0,
+      "r": 4,
+      "direction": "TOP_LEFT",
+      "locked": "k3"
+    }
+  ]
 }

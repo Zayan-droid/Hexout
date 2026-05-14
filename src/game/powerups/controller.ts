@@ -64,7 +64,7 @@ export function routeTileClick(tileId: string): boolean {
     }
 
     case "lineBlast": {
-      const { path, clearedAlong } = tileLinePath(tile, game.gridRadius);
+      const { path, clearedAlong } = tileLinePath(tile, game.mutationRuntime.currentRadius);
       pu.fireEffect({
         kind: "lineBlast",
         from: tile,

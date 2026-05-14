@@ -1,6 +1,12 @@
 import { create } from "zustand";
 import type { GameStatus, LevelData, Tile, Hex } from "@/types";
 import { buildOccupancy, hasAnyValidMove, resolveMove } from "@/game/engine/movement";
+import {
+  applyMutationTick,
+  initMutationRuntime,
+  CRACKED_LOCK,
+  type MutationRuntime,
+} from "@/game/engine/mutations";
 import { AudioManager } from "@/services/audio";
 import { useThemeStore } from "@/store/themeStore";
 import { getTheme } from "@/themes";
@@ -22,6 +28,7 @@ interface UndoSnapshot {
   comboCount: number;
   lastClearTime: number;
   clearedKeys: Set<string>;
+  mutationRuntime: MutationRuntime;
 }
 
 interface GameState {
@@ -36,6 +43,8 @@ interface GameState {
   lastClearedPos: { q: number; r: number } | null;
   /** Key values whose owner tiles have been cleared; gates locked tiles. */
   clearedKeys: Set<string>;
+  /** Active mutation state — shifts, shrink, hazard telegraph. */
+  mutationRuntime: MutationRuntime;
 
   /** snapshot before the most recent move — fuel for the Rewind power-up */
   undoBuffer: UndoSnapshot | null;
@@ -66,8 +75,22 @@ function snapshot(s: GameState): UndoSnapshot {
     comboCount: s.comboCount,
     lastClearTime: s.lastClearTime,
     clearedKeys: new Set(s.clearedKeys),
+    mutationRuntime: {
+      ...s.mutationRuntime,
+      nextShiftIn: [...s.mutationRuntime.nextShiftIn],
+      hazardousHexes: new Set(s.mutationRuntime.hazardousHexes),
+    },
   };
 }
+
+const EMPTY_RUNTIME: MutationRuntime = {
+  currentRadius: 0,
+  hazardousHexes: new Set(),
+  nextShiftIn: [],
+  nextShrinkIn: Infinity,
+  shiftSpecs: [],
+  shrinkSpec: null,
+};
 
 export const useGameStore = create<GameState>((set, get) => ({
   level: null,
@@ -80,6 +103,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   animatingId: null,
   lastClearedPos: null,
   clearedKeys: new Set(),
+  mutationRuntime: EMPTY_RUNTIME,
   undoBuffer: null,
 
   loadLevel: (level) => {
@@ -92,6 +116,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       r: t.r,
       locked: t.locked,
       key: t.key,
+      crackAfter: t.crackAfter,
     }));
     set({
       level,
@@ -104,6 +129,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       animatingId: null,
       lastClearedPos: null,
       clearedKeys: new Set(),
+      mutationRuntime: initMutationRuntime(level),
       undoBuffer: null,
     });
     usePowerUpStore.getState().resetForLevel();
@@ -116,17 +142,17 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   attemptMove: (tileId) => {
     const state = get();
-    const { tiles, gridRadius, status, animatingId } = state;
+    const { tiles, mutationRuntime, status, animatingId } = state;
     if (status !== "playing" || animatingId) return { kind: "invalid" };
     const tile = tiles.find((t) => t.id === tileId);
     if (!tile) return { kind: "invalid" };
 
-    const occ = buildOccupancy(tiles);
-    const outcome = resolveMove(tile, occ, gridRadius);
-
     if (tile.locked && !state.clearedKeys.has(tile.locked)) {
       return { kind: "invalid" };
     }
+
+    const occ = buildOccupancy(tiles);
+    const outcome = resolveMove(tile, occ, mutationRuntime.currentRadius);
 
     if (outcome.kind === "exits") {
       AudioManager.slide();
@@ -151,13 +177,17 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   finishExit: (tileId) => {
-    const { tiles, gridRadius, lastClearTime, comboCount, clearedKeys } = get();
+    const { tiles, mutationRuntime, lastClearTime, comboCount, clearedKeys } = get();
     const tile = tiles.find((t) => t.id === tileId);
-    const remaining = tiles.filter((t) => t.id !== tileId);
+    const afterClear = tiles.filter((t) => t.id !== tileId);
 
     const nextClearedKeys = tile?.key
       ? new Set([...clearedKeys, tile.key])
       : clearedKeys;
+
+    // Apply mutation tick (crack → shift → shrink) on the post-clear board.
+    const ticked = applyMutationTick(afterClear, mutationRuntime);
+    const remaining = ticked.tiles;
 
     const now = Date.now();
     const isCombo = now - lastClearTime < COMBO_WINDOW_MS;
@@ -173,11 +203,15 @@ export const useGameStore = create<GameState>((set, get) => ({
       navigator.vibrate(newCombo >= 2 ? [30, 10, 30] : [20]);
     }
 
+    // Cracked tiles are permanent obstacles — win when all non-cracked tiles are gone.
+    const playable = remaining.filter((t) => t.locked !== CRACKED_LOCK);
     let nextStatus: GameStatus = "playing";
-    if (remaining.length === 0) {
+    if (playable.length === 0) {
       nextStatus = "won";
       setTimeout(() => AudioManager.win(), 120);
-    } else if (!hasAnyValidMove(remaining, gridRadius, nextClearedKeys)) {
+    } else if (
+      !hasAnyValidMove(remaining, ticked.runtime.currentRadius, nextClearedKeys)
+    ) {
       nextStatus = "lost";
       setTimeout(() => AudioManager.lost(), 80);
     }
@@ -190,6 +224,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       lastClearTime: now,
       lastClearedPos: tile ? { q: tile.q, r: tile.r } : null,
       clearedKeys: nextClearedKeys,
+      mutationRuntime: ticked.runtime,
     });
   },
 
@@ -201,10 +236,13 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     let nextStatus: GameStatus = state.status;
     if (finishCheck) {
-      if (remaining.length === 0) {
+      const playable = remaining.filter((t) => t.locked !== CRACKED_LOCK);
+      if (playable.length === 0) {
         nextStatus = "won";
         setTimeout(() => AudioManager.win(), 120);
-      } else if (!hasAnyValidMove(remaining, state.gridRadius, state.clearedKeys)) {
+      } else if (
+        !hasAnyValidMove(remaining, state.mutationRuntime.currentRadius, state.clearedKeys)
+      ) {
         nextStatus = "lost";
         setTimeout(() => AudioManager.lost(), 80);
       }
@@ -261,6 +299,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       comboCount: state.undoBuffer.comboCount,
       lastClearTime: state.undoBuffer.lastClearTime,
       clearedKeys: state.undoBuffer.clearedKeys,
+      mutationRuntime: state.undoBuffer.mutationRuntime,
       undoBuffer: null,
       animatingId: null,
     });

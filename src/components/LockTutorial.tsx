@@ -43,12 +43,13 @@ export function LockTutorial({ levelId, onDismiss }: LockTutorialProps) {
             exit={{ scale: 0.9, opacity: 0 }}
             onClick={(e) => e.stopPropagation()}
             style={{
-              backgroundColor: "var(--bg-primary)",
+              backgroundColor: "var(--bg-base)",
+              backgroundImage: "var(--surface-raised)",
               borderRadius: 24,
               padding: 40,
               maxWidth: 480,
-              boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
-              border: "1px solid var(--board-stroke)",
+              boxShadow: "var(--shadow-raised)",
+              border: "1px solid var(--surface-raised-border)",
             }}
           >
             <h2
@@ -57,36 +58,46 @@ export function LockTutorial({ levelId, onDismiss }: LockTutorialProps) {
                 fontWeight: 600,
                 marginTop: 0,
                 marginBottom: 16,
-                color: "var(--text-primary)",
+                color: "var(--fg-primary)",
+                fontFamily: "var(--font-display)",
               }}
             >
-              🔐 Locked Tiles
+              Locked Tiles
             </h2>
 
             <div
               style={{
                 fontSize: 15,
                 lineHeight: 1.6,
-                color: "var(--text-secondary)",
+                color: "var(--fg-secondary)",
                 marginBottom: 24,
               }}
             >
               <p style={{ marginTop: 0 }}>
-                Some tiles have a <strong>padlock icon</strong> and appear dimmed. They are <strong>locked</strong> and cannot be tapped until unlocked.
+                Some tiles wear a <strong>padlock</strong> and look dimmed. They can't be tapped until you clear their matching key.
               </p>
 
               <p>
-                <strong>To unlock a locked tile:</strong>
+                <strong>Spotting the pair:</strong> every locked tile and its key share the same <strong>colored ring</strong> around their edge. Matching ring colors mean "this key opens this lock."
               </p>
+
               <ol style={{ marginTop: 8, marginBottom: 16, paddingLeft: 20 }}>
-                <li>Find the tile with a <strong>matching key</strong></li>
-                <li>Tap and clear that key tile first</li>
-                <li>Once the key clears, the locked tile becomes unlocked</li>
-                <li>Now you can tap the previously locked tile</li>
+                <li>Find the key tile (it has a small key icon and the same ring color)</li>
+                <li>Clear that key first — its locked partner unlocks instantly</li>
+                <li>Now the previously locked tile can be tapped</li>
               </ol>
 
-              <p style={{ marginBottom: 0, padding: 12, backgroundColor: "rgba(100,200,150,0.15)", borderRadius: 8 }}>
-                <strong>Example:</strong> A tile might be locked by key "k1". Find the tile with key "k1", clear it, and then the locked tile becomes available.
+              <p
+                style={{
+                  marginBottom: 0,
+                  padding: 12,
+                  backgroundColor: "color-mix(in srgb, var(--accent-primary) 14%, transparent)",
+                  border: "1px solid color-mix(in srgb, var(--accent-primary) 28%, transparent)",
+                  borderRadius: 10,
+                  color: "var(--fg-primary)",
+                }}
+              >
+                <strong>Tip:</strong> hover or tap a locked tile — its key partner pulses in the same color so you can find it at a glance.
               </p>
             </div>
 
@@ -98,7 +109,7 @@ export function LockTutorial({ levelId, onDismiss }: LockTutorialProps) {
                 fontSize: 16,
                 fontWeight: 600,
                 backgroundColor: "var(--accent-primary)",
-                color: "white",
+                color: "var(--fg-on-accent)",
                 border: "none",
                 borderRadius: 12,
                 cursor: "pointer",

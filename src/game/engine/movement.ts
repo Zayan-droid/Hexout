@@ -31,13 +31,15 @@ export function resolveMove(
   const maxSteps = gridRadius * 4 + 4;
   for (let i = 0; i < maxSteps; i++) {
     cursor = hexAdd(cursor, vec);
-    if (!isInsideRadius(cursor, gridRadius)) {
-      path.push({ ...cursor });
-      return { kind: "exits", path };
-    }
+    // Check occupancy before the radius boundary — cracked tiles from shrink/shift
+    // sit outside currentRadius but must still block rays passing through them.
     const blocker = occupancy.get(hexKey(cursor.q, cursor.r));
     if (blocker && blocker.id !== tile.id) {
       return { kind: "blocked", blocker, path };
+    }
+    if (!isInsideRadius(cursor, gridRadius)) {
+      path.push({ ...cursor });
+      return { kind: "exits", path };
     }
     path.push({ ...cursor });
   }

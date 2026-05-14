@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from "react";
 import { useGameStore, tilesInBombRadius } from "@/store/gameStore";
 import { usePowerUpStore } from "@/store/powerupStore";
-import { createHexagonBoardCells, hexToPixel } from "@/game/grid/hex";
+import { createHexagonBoardCells, hexKey, hexToPixel, isInsideRadius } from "@/game/grid/hex";
 import { HexCell } from "./HexCell";
 import { TileView } from "./TileView";
 import { ParticleCanvas, type ParticleCanvasHandle } from "./ParticleCanvas";
@@ -9,6 +9,7 @@ import { PowerUpEffects } from "./powerups/PowerUpEffects";
 import { useTheme } from "./ThemeProvider";
 import { POWER_UPS } from "@/types/powerup";
 import { routeTileClick } from "@/game/powerups/controller";
+import { getPairTints } from "@/game/lockColors";
 
 interface GameBoardProps {
   width: number;
@@ -20,7 +21,10 @@ const SHAKE_MS = 400;
 export function GameBoard({ width, height }: GameBoardProps) {
   const theme = useTheme();
   const tiles = useGameStore((s) => s.tiles);
+  const level = useGameStore((s) => s.level);
   const gridRadius = useGameStore((s) => s.gridRadius);
+  const currentRadius = useGameStore((s) => s.mutationRuntime.currentRadius);
+  const hazardousHexes = useGameStore((s) => s.mutationRuntime.hazardousHexes);
   const animatingId = useGameStore((s) => s.animatingId);
   const clearedKeys = useGameStore((s) => s.clearedKeys);
   const attemptMove = useGameStore((s) => s.attemptMove);
@@ -81,6 +85,24 @@ export function GameBoard({ width, height }: GameBoardProps) {
     if (!tile) return new Set<string>();
     return new Set(tiles.filter((t) => t.color === tile.color).map((t) => t.id));
   }, [activePowerUp, hoverId, tiles]);
+
+  // Stable key→tint mapping derived from the *original* level data so colors
+  // don't shift as tiles clear.
+  const pairTints = useMemo(
+    () => (level ? getPairTints(level.tiles) : new Map<string, string>()),
+    [level]
+  );
+
+  // Hovering a key or locked tile highlights every tile that shares its pair id.
+  const highlightedPairIds = useMemo(() => {
+    if (!hoverId || activePowerUp) return new Set<string>();
+    const tile = tiles.find((t) => t.id === hoverId);
+    const pairId = tile?.key ?? tile?.locked;
+    if (!pairId) return new Set<string>();
+    return new Set(
+      tiles.filter((t) => t.key === pairId || t.locked === pairId).map((t) => t.id)
+    );
+  }, [hoverId, tiles, activePowerUp]);
 
   const handleTileClick = (tileId: string) => {
     if (animatingId) return;
@@ -210,13 +232,30 @@ export function GameBoard({ width, height }: GameBoardProps) {
         </defs>
 
         <g transform={`translate(${offsetX},${offsetY})`}>
-          {cells.map((c) => (
-            <HexCell key={`c-${c.q}-${c.r}`} hex={c} size={size} />
-          ))}
+          {cells.map((c) => {
+            const dead = !isInsideRadius(c, currentRadius);
+            const hazardous = !dead && hazardousHexes.has(hexKey(c.q, c.r));
+            return (
+              <HexCell
+                key={`c-${c.q}-${c.r}`}
+                hex={c}
+                size={size}
+                hazardous={hazardous}
+                dead={dead}
+              />
+            );
+          })}
 
           {tiles.map((tile) => {
             const isPicked = picks.includes(tile.id);
-            const isLocked = !!tile.locked && !clearedKeys.has(tile.locked);
+            const isCracked = !!tile.cracked;
+            const isCracking = !isCracked && tile.crackAfter !== undefined && tile.crackAfter > 0;
+            const isLocked =
+              !isCracked && !!tile.locked && !clearedKeys.has(tile.locked);
+            const isKey = !!tile.key;
+            const pairId = tile.key ?? tile.locked;
+            const pairTint = pairId ? pairTints.get(pairId) : undefined;
+            const isPairHighlighted = highlightedPairIds.has(tile.id);
             const isTargetable =
               !!activePowerUp &&
               !isPicked &&
@@ -241,6 +280,11 @@ export function GameBoard({ width, height }: GameBoardProps) {
                   isAnimating={animatingId === tile.id}
                   isShaking={shakingId === tile.id}
                   isLocked={isLocked}
+                  isCracking={isCracking}
+                  isCracked={isCracked}
+                  isKey={isKey}
+                  pairTint={pairTint}
+                  isPairHighlighted={isPairHighlighted}
                   isTargetable={isTargetable}
                   isPicked={isPicked}
                   isPreviewedDanger={isPreviewedDanger}

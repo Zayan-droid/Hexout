@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useGameStore } from "@/store/gameStore";
 import { calcStars } from "@/store/progressStore";
 import { AudioManager } from "@/services/audio";
+import { MutationHUD } from "./MutationHUD";
 
 interface HUDProps {
   levelName: string;
@@ -164,6 +165,8 @@ export function HUD({ levelName, levelId, par, onReset }: HUDProps) {
           )}
         </div>
       </div>
+
+      <MutationHUD />
 
       <AnimatePresence>
         {comboCount >= 2 && (

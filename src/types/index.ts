@@ -26,7 +26,32 @@ export interface Tile {
   locked?: string;
   /** When this tile is cleared, all tiles with locked === this value become movable. */
   key?: string;
+  /** Number of clears remaining until cracks finalize this tile. Counts down each clear. */
+  crackAfter?: number;
+  /** True once cracks have finalized: tile is permanently immovable and acts as a blocker. */
+  cracked?: boolean;
 }
+
+/**
+ * Rule mutations. Each level may declare zero or more mutations that re-shape gameplay
+ * over time. Crack is per-tile (set on the Tile itself), so it's not in this union.
+ */
+export type MutationSpec =
+  | {
+      /** All tiles slide one hex in `direction` every `period` clears. Tiles pushed
+       *  off the board count as cleared. Tiles colliding with another tile stop. */
+      kind: "shift";
+      direction: Direction;
+      period: number;
+    }
+  | {
+      /** The outermost ring of the board becomes hazardous every `period` clears,
+       *  shrinking the play area. Tiles caught on hazardous hexes are destroyed. */
+      kind: "shrink";
+      period: number;
+      /** Optional floor; play area will never shrink below this radius. */
+      minRadius?: number;
+    };
 
 export interface LevelData {
   id: number;
@@ -42,7 +67,9 @@ export interface LevelData {
     type?: TileType;
     locked?: string;
     key?: string;
+    crackAfter?: number;
   }>;
+  mutations?: MutationSpec[];
 }
 
 export type GameStatus = "playing" | "won" | "lost";

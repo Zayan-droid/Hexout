@@ -1,0 +1,139 @@
+{
+  "id": 35,
+  "name": "Tight Squeeze",
+  "gridRadius": 4,
+  "par": 24,
+  "difficulty": "expert",
+  "tiles": [
+    {
+      "q": 2,
+      "r": 1,
+      "direction": "TOP_LEFT"
+    },
+    {
+      "q": -4,
+      "r": 4,
+      "direction": "TOP_RIGHT",
+      "crackAfter": 16
+    },
+    {
+      "q": -3,
+      "r": 0,
+      "direction": "RIGHT",
+      "crackAfter": 11
+    },
+    {
+      "q": -1,
+      "r": 4,
+      "direction": "TOP_RIGHT"
+    },
+    {
+      "q": 4,
+      "r": -3,
+      "direction": "LEFT"
+    },
+    {
+      "q": -1,
+      "r": 3,
+      "direction": "TOP_LEFT"
+    },
+    {
+      "q": -3,
+      "r": 2,
+      "direction": "RIGHT"
+    },
+    {
+      "q": 3,
+      "r": 1,
+      "direction": "LEFT"
+    },
+    {
+      "q": 0,
+      "r": 1,
+      "direction": "TOP_RIGHT"
+    },
+    {
+      "q": 2,
+      "r": -2,
+      "direction": "LEFT"
+    },
+    {
+      "q": -2,
+      "r": 3,
+      "direction": "TOP_LEFT"
+    },
+    {
+      "q": 3,
+      "r": -4,
+      "direction": "BOTTOM_LEFT"
+    },
+    {
+      "q": 1,
+      "r": 2,
+      "direction": "TOP_LEFT"
+    },
+    {
+      "q": 0,
+      "r": 4,
+      "direction": "LEFT"
+    },
+    {
+      "q": 1,
+      "r": -1,
+      "direction": "TOP_LEFT"
+    },
+    {
+      "q": -3,
+      "r": -1,
+      "direction": "RIGHT"
+    },
+    {
+      "q": 4,
+      "r": -2,
+      "direction": "LEFT"
+    },
+    {
+      "q": 1,
+      "r": 1,
+      "direction": "BOTTOM_LEFT"
+    },
+    {
+      "q": 4,
+      "r": 0,
+      "direction": "TOP_LEFT"
+    },
+    {
+      "q": -1,
+      "r": 2,
+      "direction": "TOP_RIGHT"
+    },
+    {
+      "q": 0,
+      "r": -2,
+      "direction": "BOTTOM_LEFT"
+    },
+    {
+      "q": 1,
+      "r": 3,
+      "direction": "LEFT"
+    },
+    {
+      "q": 0,
+      "r": 3,
+      "direction": "TOP_LEFT"
+    },
+    {
+      "q": -4,
+      "r": 0,
+      "direction": "RIGHT",
+      "crackAfter": 13
+    }
+  ],
+  "mutations": [
+    {
+      "kind": "shrink",
+      "period": 12,
+      "minRadius": 3
+    }
+  ]
+}

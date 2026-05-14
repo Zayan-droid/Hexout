@@ -1,0 +1,156 @@
+{
+  "id": 38,
+  "name": "Down the Cascade",
+  "gridRadius": 4,
+  "par": 26,
+  "difficulty": "expert",
+  "tiles": [
+    {
+      "q": 4,
+      "r": -3,
+      "direction": "BOTTOM_LEFT",
+      "crackAfter": 11
+    },
+    {
+      "q": -1,
+      "r": -1,
+      "direction": "BOTTOM_RIGHT"
+    },
+    {
+      "q": 2,
+      "r": -4,
+      "direction": "BOTTOM_RIGHT"
+    },
+    {
+      "q": -1,
+      "r": 1,
+      "direction": "TOP_RIGHT"
+    },
+    {
+      "q": 3,
+      "r": -1,
+      "direction": "BOTTOM_LEFT"
+    },
+    {
+      "q": 1,
+      "r": -3,
+      "direction": "RIGHT"
+    },
+    {
+      "q": 1,
+      "r": 3,
+      "direction": "TOP_RIGHT"
+    },
+    {
+      "q": 0,
+      "r": -1,
+      "direction": "BOTTOM_RIGHT"
+    },
+    {
+      "q": 0,
+      "r": 2,
+      "direction": "LEFT"
+    },
+    {
+      "q": -3,
+      "r": 0,
+      "direction": "TOP_RIGHT"
+    },
+    {
+      "q": 1,
+      "r": -1,
+      "direction": "TOP_LEFT"
+    },
+    {
+      "q": 4,
+      "r": -2,
+      "direction": "BOTTOM_LEFT"
+    },
+    {
+      "q": 0,
+      "r": -2,
+      "direction": "RIGHT"
+    },
+    {
+      "q": 3,
+      "r": 1,
+      "direction": "TOP_LEFT"
+    },
+    {
+      "q": -4,
+      "r": 4,
+      "direction": "TOP_RIGHT",
+      "crackAfter": 18
+    },
+    {
+      "q": -4,
+      "r": 0,
+      "direction": "TOP_RIGHT"
+    },
+    {
+      "q": -2,
+      "r": 2,
+      "direction": "TOP_RIGHT"
+    },
+    {
+      "q": 0,
+      "r": -3,
+      "direction": "BOTTOM_RIGHT"
+    },
+    {
+      "q": -2,
+      "r": 4,
+      "direction": "TOP_LEFT",
+      "locked": "k1"
+    },
+    {
+      "q": -1,
+      "r": 0,
+      "direction": "RIGHT",
+      "key": "k1"
+    },
+    {
+      "q": 2,
+      "r": 1,
+      "direction": "LEFT"
+    },
+    {
+      "q": 0,
+      "r": -4,
+      "direction": "BOTTOM_RIGHT",
+      "crackAfter": 14
+    },
+    {
+      "q": -4,
+      "r": 1,
+      "direction": "TOP_RIGHT"
+    },
+    {
+      "q": 4,
+      "r": -1,
+      "direction": "LEFT"
+    },
+    {
+      "q": -1,
+      "r": -2,
+      "direction": "TOP_LEFT"
+    },
+    {
+      "q": -4,
+      "r": 3,
+      "direction": "TOP_RIGHT"
+    }
+  ],
+  "mutations": [
+    {
+      "kind": "shrink",
+      "period": 13,
+      "minRadius": 3
+    },
+    {
+      "kind": "shift",
+      "direction": "BOTTOM_LEFT",
+      "period": 6
+    }
+  ]
+}

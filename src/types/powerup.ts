@@ -81,12 +81,8 @@ export const POWER_UPS: Record<PowerUpId, PowerUpDef> = {
 };
 
 export const POWER_UP_ORDER: PowerUpId[] = [
-  "hammer",
   "swap",
-  "lineBlast",
   "bomb",
-  "colorClear",
-  "shuffle",
   "undo",
 ];
 

@@ -29,13 +29,13 @@ interface PowerUpState {
 }
 
 const STARTING: Record<PowerUpId, number> = {
-  hammer: 3,
-  swap: 2,
-  colorClear: 2,
-  shuffle: 2,
-  lineBlast: 2,
+  hammer: 0,
+  swap: 3,
+  colorClear: 0,
+  shuffle: 0,
+  lineBlast: 0,
   undo: 3,
-  bomb: 2,
+  bomb: 1,
 };
 
 export const usePowerUpStore = create<PowerUpState>()(
@@ -85,6 +85,8 @@ export const usePowerUpStore = create<PowerUpState>()(
     }),
     {
       name: "hexout-powerups",
+      version: 2,
+      migrate: () => ({ inventory: { ...STARTING } }),
       partialize: (s) => ({ inventory: s.inventory }),
     }
   )

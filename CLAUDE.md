@@ -45,7 +45,7 @@ Two stores, kept separate by lifetime:
 
 Two sources, merged in [src/game/levels/index.ts](src/game/levels/index.ts):
 
-1. **Hand-crafted JSON** — `level1.json` … `level15.json`. Levels 1–5 predate Phase 3 and get patched with `difficulty` + `par` via `LEGACY_PATCHES`. Level 6+ JSON includes those fields directly.
+1. **Hand-crafted JSON** — `level1.json` … `level15.json`. Each file includes `difficulty` + `par` directly. `par` equals tile count (every tile must clear once; no wasted moves possible at par). Designs are verified solvable by [scripts/redesign-levels.cjs](scripts/redesign-levels.cjs), which runs the same topological-sort solvability check used by the generator.
 2. **Procedural** — [src/game/levels/generator.ts](src/game/levels/generator.ts) emits levels 16–50 using mulberry32 PRNG. Solvability is guaranteed by Kahn's topological sort over a blocking dependency graph: tile A depends on tile B if B sits in A's exit ray; if the DAG has a cycle, the level is rejected. Difficulty params (radius, tile count, max-attempt budget) live in `DifficultyParams` inside this file.
 
 `LEVELS_BY_DIFFICULTY` groups levels by tab for the level select screen.

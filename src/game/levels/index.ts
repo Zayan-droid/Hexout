@@ -16,28 +16,11 @@ import level13 from "./level13.json";
 import level14 from "./level14.json";
 import level15 from "./level15.json";
 
-// Patch legacy levels (1-5) with difficulty + par since they predate Phase 3
-const LEGACY_PATCHES: Record<number, { difficulty: Difficulty; par: number }> = {
-  1: { difficulty: "beginner", par: 3 },
-  2: { difficulty: "beginner", par: 5 },
-  3: { difficulty: "easy", par: 7 },
-  4: { difficulty: "easy", par: 8 },
-  5: { difficulty: "medium", par: 11 },
-};
-
-function patch(raw: object): LevelData {
-  const l = raw as LevelData;
-  const p = LEGACY_PATCHES[l.id];
-  return p ? { ...l, ...p } : l;
-}
-
 const HAND_CRAFTED: LevelData[] = [
-  patch(level1), patch(level2), patch(level3), patch(level4), patch(level5),
-  level6 as LevelData, level7 as LevelData, level8 as LevelData,
-  level9 as LevelData, level10 as LevelData, level11 as LevelData,
-  level12 as LevelData, level13 as LevelData, level14 as LevelData,
-  level15 as LevelData,
-];
+  level1, level2, level3, level4, level5,
+  level6, level7, level8, level9, level10,
+  level11, level12, level13, level14, level15,
+] as LevelData[];
 
 const GENERATED = buildGeneratedLevels(16);
 const HARD_GENERATED = buildHardLevels(51);

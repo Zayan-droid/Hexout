@@ -1,21 +1,94 @@
 {
   "id": 14,
-  "name": "Spiral",
+  "name": "Maelstrom",
   "difficulty": "expert",
-  "par": 12,
+  "par": 17,
   "gridRadius": 4,
   "tiles": [
-    { "q": 4, "r": -1, "direction": "RIGHT" },
-    { "q": 3, "r": -1, "direction": "RIGHT" },
-    { "q": 2, "r": -1, "direction": "RIGHT" },
-    { "q": 1, "r": -1, "direction": "RIGHT" },
-    { "q": -1, "r": -3, "direction": "TOP_LEFT" },
-    { "q": -1, "r": -2, "direction": "TOP_LEFT" },
-    { "q": -1, "r": -1, "direction": "TOP_LEFT" },
-    { "q": -1, "r": 0, "direction": "TOP_LEFT" },
-    { "q": 1, "r": 3, "direction": "BOTTOM_RIGHT" },
-    { "q": 1, "r": 2, "direction": "BOTTOM_RIGHT" },
-    { "q": 1, "r": 1, "direction": "BOTTOM_RIGHT" },
-    { "q": 1, "r": 0, "direction": "BOTTOM_RIGHT" }
+    {
+      "q": 4,
+      "r": -4,
+      "direction": "BOTTOM_LEFT"
+    },
+    {
+      "q": 3,
+      "r": -3,
+      "direction": "BOTTOM_LEFT"
+    },
+    {
+      "q": 2,
+      "r": -2,
+      "direction": "BOTTOM_LEFT"
+    },
+    {
+      "q": 1,
+      "r": -1,
+      "direction": "BOTTOM_LEFT"
+    },
+    {
+      "q": 0,
+      "r": 0,
+      "direction": "BOTTOM_LEFT"
+    },
+    {
+      "q": -1,
+      "r": 1,
+      "direction": "BOTTOM_LEFT"
+    },
+    {
+      "q": -2,
+      "r": 2,
+      "direction": "BOTTOM_LEFT"
+    },
+    {
+      "q": -3,
+      "r": 3,
+      "direction": "BOTTOM_LEFT"
+    },
+    {
+      "q": 4,
+      "r": -3,
+      "direction": "LEFT"
+    },
+    {
+      "q": 4,
+      "r": -2,
+      "direction": "LEFT"
+    },
+    {
+      "q": 4,
+      "r": -1,
+      "direction": "LEFT"
+    },
+    {
+      "q": 0,
+      "r": 3,
+      "direction": "TOP_LEFT"
+    },
+    {
+      "q": 0,
+      "r": 4,
+      "direction": "TOP_LEFT"
+    },
+    {
+      "q": -2,
+      "r": -2,
+      "direction": "BOTTOM_RIGHT"
+    },
+    {
+      "q": -2,
+      "r": -1,
+      "direction": "BOTTOM_RIGHT"
+    },
+    {
+      "q": -2,
+      "r": 0,
+      "direction": "BOTTOM_RIGHT"
+    },
+    {
+      "q": -2,
+      "r": 1,
+      "direction": "BOTTOM_RIGHT"
+    }
   ]
 }

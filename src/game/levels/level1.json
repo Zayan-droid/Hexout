@@ -1,10 +1,29 @@
 {
   "id": 1,
-  "name": "First Steps",
+  "name": "Lockstep",
+  "difficulty": "beginner",
+  "par": 4,
   "gridRadius": 2,
   "tiles": [
-    { "q": 0, "r": 0, "direction": "RIGHT" },
-    { "q": -1, "r": 0, "direction": "LEFT" },
-    { "q": 1, "r": -1, "direction": "TOP_RIGHT" }
+    {
+      "q": -1,
+      "r": 0,
+      "direction": "LEFT"
+    },
+    {
+      "q": 0,
+      "r": 0,
+      "direction": "LEFT"
+    },
+    {
+      "q": 1,
+      "r": 0,
+      "direction": "LEFT"
+    },
+    {
+      "q": 0,
+      "r": 1,
+      "direction": "TOP_LEFT"
+    }
   ]
 }

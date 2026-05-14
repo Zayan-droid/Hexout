@@ -1,17 +1,69 @@
 {
   "id": 10,
-  "name": "Scatter",
-  "difficulty": "medium",
-  "par": 8,
+  "name": "Knots",
+  "difficulty": "hard",
+  "par": 12,
   "gridRadius": 3,
   "tiles": [
-    { "q": 3, "r": 0, "direction": "RIGHT" },
-    { "q": -3, "r": 0, "direction": "LEFT" },
-    { "q": 0, "r": 3, "direction": "BOTTOM_RIGHT" },
-    { "q": 0, "r": -3, "direction": "TOP_LEFT" },
-    { "q": 2, "r": -2, "direction": "TOP_RIGHT" },
-    { "q": -2, "r": 2, "direction": "BOTTOM_LEFT" },
-    { "q": 3, "r": -2, "direction": "RIGHT" },
-    { "q": -2, "r": -1, "direction": "LEFT" }
+    {
+      "q": -1,
+      "r": -1,
+      "direction": "BOTTOM_RIGHT"
+    },
+    {
+      "q": -1,
+      "r": 0,
+      "direction": "BOTTOM_RIGHT"
+    },
+    {
+      "q": -1,
+      "r": 1,
+      "direction": "BOTTOM_RIGHT"
+    },
+    {
+      "q": 1,
+      "r": -2,
+      "direction": "BOTTOM_RIGHT"
+    },
+    {
+      "q": 1,
+      "r": -1,
+      "direction": "BOTTOM_RIGHT"
+    },
+    {
+      "q": 1,
+      "r": 0,
+      "direction": "BOTTOM_RIGHT"
+    },
+    {
+      "q": -1,
+      "r": -2,
+      "direction": "RIGHT"
+    },
+    {
+      "q": 0,
+      "r": -2,
+      "direction": "RIGHT"
+    },
+    {
+      "q": 0,
+      "r": 2,
+      "direction": "LEFT"
+    },
+    {
+      "q": -1,
+      "r": 2,
+      "direction": "LEFT"
+    },
+    {
+      "q": 2,
+      "r": -3,
+      "direction": "BOTTOM_LEFT"
+    },
+    {
+      "q": -2,
+      "r": 3,
+      "direction": "TOP_RIGHT"
+    }
   ]
 }

@@ -92,9 +92,7 @@ export const useProgressStore = create<ProgressState>()(
         })),
 
       isUnlocked: (levelId) => {
-        if (levelId <= 3) return true; // first 3 always open
-        const prev = get().levelProgress[levelId - 1];
-        return prev?.completed === true;
+        return true; // all levels unlocked for testing
       },
 
       getProgress: (levelId) => get().levelProgress[levelId],

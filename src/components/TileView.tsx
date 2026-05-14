@@ -12,6 +12,7 @@ interface TileViewProps {
   gridRadius: number;
   isAnimating: boolean;
   isShaking: boolean;
+  isLocked?: boolean;
   /** ambient pulse — tile is a valid power-up target */
   isTargetable?: boolean;
   /** glow + lift — tile is the first pick of a swap */
@@ -32,6 +33,7 @@ export function TileView({
   gridRadius,
   isAnimating,
   isShaking,
+  isLocked,
   isTargetable,
   isPicked,
   isPreviewedDanger,
@@ -147,7 +149,7 @@ export function TileView({
   return (
     <g
       ref={groupRef}
-      style={{ cursor: isAnimating ? "default" : "pointer" }}
+      style={{ cursor: isAnimating || isLocked ? "default" : "pointer" }}
       onClick={(e) => {
         e.stopPropagation();
         if (!isAnimating) onClick();
@@ -202,7 +204,7 @@ export function TileView({
         />
       )}
 
-      <g ref={hexBodyRef}>
+      <g ref={hexBodyRef} opacity={isLocked ? 0.45 : 1}>
         <TileBody
           points={points}
           color={tile.color}
@@ -220,6 +222,7 @@ export function TileView({
           dangerColor={theme.accent.danger}
         />
       </g>
+      {isLocked && <LockIcon size={size} />}
       <g transform={`rotate(${arrowAngle})`}>
         <g ref={planeRef}>
           <PaperPlane size={size} color={tile.color} stroke={theme.tile.borderColor} />
@@ -263,6 +266,36 @@ function PaperPlane({ size, color, stroke }: { size: number; color: string; stro
         x1={S * 0.62} y1={0} x2={-S * 0.5} y2={0}
         stroke="rgba(255,255,255,0.7)" strokeWidth={1.2} strokeLinecap="round"
       />
+    </g>
+  );
+}
+
+function LockIcon({ size }: { size: number }) {
+  const s = size * 0.38;
+  const bw = s * 0.9;
+  const bh = s * 0.7;
+  const rx = s * 0.18;
+  const shackleW = s * 0.44;
+  const shackleH = s * 0.42;
+  const shackleY = -s * 0.38;
+  return (
+    <g>
+      <rect
+        x={-bw / 2} y={-s * 0.12}
+        width={bw} height={bh}
+        rx={rx} ry={rx}
+        fill="rgba(0,0,0,0.72)"
+        stroke="rgba(255,255,255,0.55)"
+        strokeWidth={1.2}
+      />
+      <path
+        d={`M ${-shackleW / 2},${shackleY + shackleH} L ${-shackleW / 2},${shackleY} A ${shackleW / 2},${shackleH} 0 0 1 ${shackleW / 2},${shackleY} L ${shackleW / 2},${shackleY + shackleH}`}
+        fill="none"
+        stroke="rgba(255,255,255,0.75)"
+        strokeWidth={s * 0.17}
+        strokeLinecap="round"
+      />
+      <circle cx={0} cy={-s * 0.12 + bh * 0.38} r={s * 0.12} fill="rgba(255,255,255,0.6)" />
     </g>
   );
 }

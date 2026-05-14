@@ -21,6 +21,7 @@ interface UndoSnapshot {
   status: GameStatus;
   comboCount: number;
   lastClearTime: number;
+  clearedKeys: Set<string>;
 }
 
 interface GameState {
@@ -33,6 +34,8 @@ interface GameState {
   lastClearTime: number;
   animatingId: string | null;
   lastClearedPos: { q: number; r: number } | null;
+  /** Key values whose owner tiles have been cleared; gates locked tiles. */
+  clearedKeys: Set<string>;
 
   /** snapshot before the most recent move — fuel for the Rewind power-up */
   undoBuffer: UndoSnapshot | null;
@@ -62,6 +65,7 @@ function snapshot(s: GameState): UndoSnapshot {
     status: s.status,
     comboCount: s.comboCount,
     lastClearTime: s.lastClearTime,
+    clearedKeys: new Set(s.clearedKeys),
   };
 }
 
@@ -75,6 +79,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   lastClearTime: 0,
   animatingId: null,
   lastClearedPos: null,
+  clearedKeys: new Set(),
   undoBuffer: null,
 
   loadLevel: (level) => {
@@ -85,6 +90,8 @@ export const useGameStore = create<GameState>((set, get) => ({
       color: colorForIndex(i),
       q: t.q,
       r: t.r,
+      locked: t.locked,
+      key: t.key,
     }));
     set({
       level,
@@ -96,6 +103,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       lastClearTime: 0,
       animatingId: null,
       lastClearedPos: null,
+      clearedKeys: new Set(),
       undoBuffer: null,
     });
     usePowerUpStore.getState().resetForLevel();
@@ -115,6 +123,10 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     const occ = buildOccupancy(tiles);
     const outcome = resolveMove(tile, occ, gridRadius);
+
+    if (tile.locked && !state.clearedKeys.has(tile.locked)) {
+      return { kind: "invalid" };
+    }
 
     if (outcome.kind === "exits") {
       AudioManager.slide();
@@ -139,9 +151,13 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   finishExit: (tileId) => {
-    const { tiles, gridRadius, lastClearTime, comboCount } = get();
+    const { tiles, gridRadius, lastClearTime, comboCount, clearedKeys } = get();
     const tile = tiles.find((t) => t.id === tileId);
     const remaining = tiles.filter((t) => t.id !== tileId);
+
+    const nextClearedKeys = tile?.key
+      ? new Set([...clearedKeys, tile.key])
+      : clearedKeys;
 
     const now = Date.now();
     const isCombo = now - lastClearTime < COMBO_WINDOW_MS;
@@ -161,7 +177,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     if (remaining.length === 0) {
       nextStatus = "won";
       setTimeout(() => AudioManager.win(), 120);
-    } else if (!hasAnyValidMove(remaining, gridRadius)) {
+    } else if (!hasAnyValidMove(remaining, gridRadius, nextClearedKeys)) {
       nextStatus = "lost";
       setTimeout(() => AudioManager.lost(), 80);
     }
@@ -173,6 +189,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       comboCount: newCombo,
       lastClearTime: now,
       lastClearedPos: tile ? { q: tile.q, r: tile.r } : null,
+      clearedKeys: nextClearedKeys,
     });
   },
 
@@ -187,7 +204,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       if (remaining.length === 0) {
         nextStatus = "won";
         setTimeout(() => AudioManager.win(), 120);
-      } else if (!hasAnyValidMove(remaining, state.gridRadius)) {
+      } else if (!hasAnyValidMove(remaining, state.gridRadius, state.clearedKeys)) {
         nextStatus = "lost";
         setTimeout(() => AudioManager.lost(), 80);
       }
@@ -243,6 +260,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       status: state.undoBuffer.status,
       comboCount: state.undoBuffer.comboCount,
       lastClearTime: state.undoBuffer.lastClearTime,
+      clearedKeys: state.undoBuffer.clearedKeys,
       undoBuffer: null,
       animatingId: null,
     });

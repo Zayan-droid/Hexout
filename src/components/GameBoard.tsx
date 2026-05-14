@@ -22,6 +22,7 @@ export function GameBoard({ width, height }: GameBoardProps) {
   const tiles = useGameStore((s) => s.tiles);
   const gridRadius = useGameStore((s) => s.gridRadius);
   const animatingId = useGameStore((s) => s.animatingId);
+  const clearedKeys = useGameStore((s) => s.clearedKeys);
   const attemptMove = useGameStore((s) => s.attemptMove);
   const finishExit = useGameStore((s) => s.finishExit);
 
@@ -215,6 +216,7 @@ export function GameBoard({ width, height }: GameBoardProps) {
 
           {tiles.map((tile) => {
             const isPicked = picks.includes(tile.id);
+            const isLocked = !!tile.locked && !clearedKeys.has(tile.locked);
             const isTargetable =
               !!activePowerUp &&
               !isPicked &&
@@ -238,6 +240,7 @@ export function GameBoard({ width, height }: GameBoardProps) {
                   gridRadius={gridRadius}
                   isAnimating={animatingId === tile.id}
                   isShaking={shakingId === tile.id}
+                  isLocked={isLocked}
                   isTargetable={isTargetable}
                   isPicked={isPicked}
                   isPreviewedDanger={isPreviewedDanger}

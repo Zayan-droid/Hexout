@@ -22,6 +22,10 @@ export interface Tile {
   color: string;
   q: number;
   r: number;
+  /** If set, tile cannot move until the tile with key === this value has been cleared. */
+  locked?: string;
+  /** When this tile is cleared, all tiles with locked === this value become movable. */
+  key?: string;
 }
 
 export interface LevelData {
@@ -36,6 +40,8 @@ export interface LevelData {
     direction: Direction;
     color?: string;
     type?: TileType;
+    locked?: string;
+    key?: string;
   }>;
 }
 

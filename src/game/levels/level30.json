@@ -1,0 +1,137 @@
+﻿{
+    "id":  30,
+    "name":  "Eternity",
+    "gridRadius":  5,
+    "par":  22,
+    "difficulty":  "expert",
+    "tiles":  [
+                  {
+                      "q":  0,
+                      "key":  "k1",
+                      "r":  0,
+                      "direction":  "TOP_RIGHT"
+                  },
+                  {
+                      "q":  1,
+                      "key":  "k2",
+                      "r":  -1,
+                      "direction":  "BOTTOM_LEFT"
+                  },
+                  {
+                      "q":  2,
+                      "r":  0,
+                      "direction":  "LEFT"
+                  },
+                  {
+                      "q":  1,
+                      "r":  0,
+                      "direction":  "RIGHT",
+                      "locked":  "k1"
+                  },
+                  {
+                      "q":  0,
+                      "key":  "k3",
+                      "r":  1,
+                      "direction":  "TOP_LEFT",
+                      "locked":  "k1"
+                  },
+                  {
+                      "q":  -1,
+                      "r":  0,
+                      "direction":  "BOTTOM_RIGHT"
+                  },
+                  {
+                      "q":  2,
+                      "r":  -1,
+                      "direction":  "BOTTOM_RIGHT",
+                      "locked":  "k2"
+                  },
+                  {
+                      "q":  1,
+                      "key":  "k4",
+                      "r":  1,
+                      "direction":  "LEFT",
+                      "locked":  "k2"
+                  },
+                  {
+                      "q":  3,
+                      "r":  0,
+                      "direction":  "TOP_LEFT"
+                  },
+                  {
+                      "q":  3,
+                      "r":  -1,
+                      "direction":  "BOTTOM_LEFT"
+                  },
+                  {
+                      "q":  -2,
+                      "r":  0,
+                      "direction":  "TOP_RIGHT"
+                  },
+                  {
+                      "q":  -1,
+                      "r":  1,
+                      "direction":  "BOTTOM_LEFT",
+                      "locked":  "k3"
+                  },
+                  {
+                      "q":  0,
+                      "key":  "k5",
+                      "r":  2,
+                      "direction":  "RIGHT",
+                      "locked":  "k3"
+                  },
+                  {
+                      "q":  2,
+                      "r":  1,
+                      "direction":  "BOTTOM_LEFT"
+                  },
+                  {
+                      "q":  -1,
+                      "r":  2,
+                      "direction":  "LEFT",
+                      "locked":  "k4"
+                  },
+                  {
+                      "q":  1,
+                      "r":  2,
+                      "direction":  "BOTTOM_RIGHT",
+                      "locked":  "k5"
+                  },
+                  {
+                      "q":  3,
+                      "r":  1,
+                      "direction":  "BOTTOM_RIGHT"
+                  },
+                  {
+                      "q":  0,
+                      "key":  "k6",
+                      "r":  -1,
+                      "direction":  "BOTTOM_LEFT",
+                      "locked":  "k4"
+                  },
+                  {
+                      "q":  -2,
+                      "r":  1,
+                      "direction":  "BOTTOM_RIGHT"
+                  },
+                  {
+                      "q":  1,
+                      "r":  -2,
+                      "direction":  "TOP_RIGHT",
+                      "locked":  "k6"
+                  },
+                  {
+                      "q":  2,
+                      "key":  "k7",
+                      "r":  -2,
+                      "direction":  "LEFT"
+                  },
+                  {
+                      "q":  -1,
+                      "r":  -1,
+                      "direction":  "RIGHT",
+                      "locked":  "k7"
+                  }
+              ]
+}

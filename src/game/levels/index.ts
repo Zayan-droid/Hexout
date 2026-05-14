@@ -14,11 +14,29 @@ import level12 from "./level12.json";
 import level13 from "./level13.json";
 import level14 from "./level14.json";
 import level15 from "./level15.json";
+import level16 from "./level16.json";
+import level17 from "./level17.json";
+import level18 from "./level18.json";
+import level19 from "./level19.json";
+import level20 from "./level20.json";
+import level21 from "./level21.json";
+import level22 from "./level22.json";
+import level23 from "./level23.json";
+import level24 from "./level24.json";
+import level25 from "./level25.json";
+import level26 from "./level26.json";
+import level27 from "./level27.json";
+import level28 from "./level28.json";
+import level29 from "./level29.json";
+import level30 from "./level30.json";
 
 export const LEVELS: LevelData[] = [
   level1, level2, level3, level4, level5,
   level6, level7, level8, level9, level10,
   level11, level12, level13, level14, level15,
+  level16, level17, level18, level19, level20,
+  level21, level22, level23, level24, level25,
+  level26, level27, level28, level29, level30,
 ] as LevelData[];
 
 export function getLevelById(id: number | string): LevelData | undefined {

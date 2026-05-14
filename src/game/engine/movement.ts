@@ -45,13 +45,18 @@ export function resolveMove(
   return { kind: "exits", path };
 }
 
-// True if any tile on the board has at least one valid (exit) move available.
-// A move is "valid" if the tile can leave the board along its arrow.
-// (Sliding into another empty cell without exiting isn't a thing in this game —
-// tiles only resolve by exiting the board.)
-export function hasAnyValidMove(tiles: Tile[], gridRadius: number): boolean {
+// True if any movable tile has a valid (exit) move available.
+// `clearedKeys` — the set of key values whose owner tiles have already been cleared.
+// Locked tiles (whose key hasn't been cleared yet) are skipped as movers but still
+// count as occupancy blockers for other tiles.
+export function hasAnyValidMove(
+  tiles: Tile[],
+  gridRadius: number,
+  clearedKeys: Set<string> = new Set()
+): boolean {
   const occ = buildOccupancy(tiles);
   for (const t of tiles) {
+    if (t.locked && !clearedKeys.has(t.locked)) continue; // still locked
     const out = resolveMove(t, occ, gridRadius);
     if (out.kind === "exits") return true;
   }

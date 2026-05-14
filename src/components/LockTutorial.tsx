@@ -89,15 +89,28 @@ export function LockTutorial({ levelId, onDismiss }: LockTutorialProps) {
 
               <p
                 style={{
-                  marginBottom: 0,
                   padding: 12,
                   backgroundColor: "color-mix(in srgb, var(--accent-primary) 14%, transparent)",
                   border: "1px solid color-mix(in srgb, var(--accent-primary) 28%, transparent)",
                   borderRadius: 10,
                   color: "var(--fg-primary)",
+                  marginBottom: 12,
                 }}
               >
                 <strong>Tip:</strong> hover or tap a locked tile — its key partner pulses in the same color so you can find it at a glance.
+              </p>
+
+              <p
+                style={{
+                  marginBottom: 0,
+                  padding: 12,
+                  backgroundColor: "color-mix(in srgb, var(--color-warning, #f59e0b) 14%, transparent)",
+                  border: "1px solid color-mix(in srgb, var(--color-warning, #f59e0b) 28%, transparent)",
+                  borderRadius: 10,
+                  color: "var(--fg-primary)",
+                }}
+              >
+                <strong>Warning:</strong> if a lock tile gets frozen (cracked by hazards and left behind), you lose <strong>1 star</strong> per frozen lock. You can still win, but your rating will suffer — minimum 1 star.
               </p>
             </div>
 

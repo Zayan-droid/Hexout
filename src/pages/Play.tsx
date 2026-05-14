@@ -7,6 +7,7 @@ import { PowerUpBar } from "@/components/powerups/PowerUpBar";
 import { LockTutorial } from "@/components/LockTutorial";
 import { useGameStore } from "@/store/gameStore";
 import { useProgressStore, calcStars } from "@/store/progressStore";
+import { CRACKED_LOCK } from "@/game/engine/mutations";
 import { LEVELS, getLevelById } from "@/game/levels";
 import { useElementSize } from "@/hooks/useElementSize";
 
@@ -17,6 +18,7 @@ export default function Play() {
   const reset = useGameStore((s) => s.reset);
   const status = useGameStore((s) => s.status);
   const moves = useGameStore((s) => s.moves);
+  const tiles = useGameStore((s) => s.tiles);
 
   const { recordCompletion, recordRetry, isUnlocked } = useProgressStore();
   const hasRecorded = useRef(false);
@@ -32,13 +34,15 @@ export default function Play() {
     hasRecorded.current = false;
   }, [levelId, level, loadLevel, navigate, isUnlocked]);
 
+  const frozenLocks = tiles.filter((t) => t.locked === CRACKED_LOCK).length;
+
   // Record win once
   useEffect(() => {
     if (status === "won" && level && !hasRecorded.current) {
       hasRecorded.current = true;
-      recordCompletion(level.id, moves, level.par ?? moves);
+      recordCompletion(level.id, moves, level.par ?? moves, frozenLocks);
     }
-  }, [status, level, moves, recordCompletion]);
+  }, [status, level, moves, frozenLocks, recordCompletion]);
 
   const handleReset = () => {
     recordRetry();
@@ -51,7 +55,7 @@ export default function Play() {
   const nextLevel = idx >= 0 && idx < LEVELS.length - 1 ? LEVELS[idx + 1] : null;
   const nextUnlocked = nextLevel ? isUnlocked(nextLevel.id) || status === "won" : false;
   const par = level.par ?? 0;
-  const stars = status === "won" ? calcStars(moves, par) : 0;
+  const stars = status === "won" ? calcStars(moves, par, frozenLocks) : 0;
 
   return (
     <div className="app-shell">

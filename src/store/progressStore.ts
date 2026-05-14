@@ -5,10 +5,12 @@ import type { LevelProgress, PlayerStats } from "@/types";
 // How many moves above par still earns 2 stars (50% slack)
 const TWO_STAR_MULTIPLIER = 1.5;
 
-export function calcStars(moves: number, par: number): number {
-  if (moves <= par) return 3;
-  if (moves <= Math.ceil(par * TWO_STAR_MULTIPLIER)) return 2;
-  return 1;
+export function calcStars(moves: number, par: number, frozenLocks = 0): number {
+  let stars: number;
+  if (moves <= par) stars = 3;
+  else if (moves <= Math.ceil(par * TWO_STAR_MULTIPLIER)) stars = 2;
+  else stars = 1;
+  return Math.max(1, stars - frozenLocks);
 }
 
 interface ProgressState {
@@ -16,7 +18,7 @@ interface ProgressState {
   stats: PlayerStats;
 
   // Returns new stars earned (0 if no improvement)
-  recordCompletion: (levelId: number, moves: number, par: number) => number;
+  recordCompletion: (levelId: number, moves: number, par: number, frozenLocks?: number) => number;
   recordInvalidMove: () => void;
   recordRetry: () => void;
   isUnlocked: (levelId: number) => boolean;
@@ -37,9 +39,9 @@ export const useProgressStore = create<ProgressState>()(
       levelProgress: {},
       stats: { ...DEFAULT_STATS },
 
-      recordCompletion: (levelId, moves, par) => {
+      recordCompletion: (levelId, moves, par, frozenLocks = 0) => {
         const existing = get().levelProgress[levelId];
-        const newStars = calcStars(moves, par);
+        const newStars = calcStars(moves, par, frozenLocks);
         const prevStars = existing?.stars ?? 0;
         const prevBest = existing?.bestMoves ?? Infinity;
         const improved = newStars > prevStars || moves < prevBest;

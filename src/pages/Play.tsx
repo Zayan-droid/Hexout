@@ -4,6 +4,7 @@ import { GameBoard } from "@/components/GameBoard";
 import { HUD } from "@/components/HUD";
 import { ResultOverlay } from "@/components/ResultOverlay";
 import { PowerUpBar } from "@/components/powerups/PowerUpBar";
+import { LockTutorial } from "@/components/LockTutorial";
 import { useGameStore } from "@/store/gameStore";
 import { useProgressStore, calcStars } from "@/store/progressStore";
 import { LEVELS, getLevelById } from "@/game/levels";
@@ -72,6 +73,7 @@ export default function Play() {
         />
       </div>
       <PowerUpBar />
+      <LockTutorial levelId={level.id} onDismiss={() => {}} />
     </div>
   );
 }

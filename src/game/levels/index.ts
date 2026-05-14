@@ -1,5 +1,4 @@
 import type { Difficulty, LevelData } from "@/types";
-import { buildGeneratedLevels, buildHardLevels } from "./generator";
 import level1 from "./level1.json";
 import level2 from "./level2.json";
 import level3 from "./level3.json";
@@ -16,16 +15,11 @@ import level13 from "./level13.json";
 import level14 from "./level14.json";
 import level15 from "./level15.json";
 
-const HAND_CRAFTED: LevelData[] = [
+export const LEVELS: LevelData[] = [
   level1, level2, level3, level4, level5,
   level6, level7, level8, level9, level10,
   level11, level12, level13, level14, level15,
 ] as LevelData[];
-
-const GENERATED = buildGeneratedLevels(16);
-const HARD_GENERATED = buildHardLevels(51);
-
-export const LEVELS: LevelData[] = [...HAND_CRAFTED, ...GENERATED, ...HARD_GENERATED];
 
 export function getLevelById(id: number | string): LevelData | undefined {
   const numId = typeof id === "string" ? parseInt(id, 10) : id;
